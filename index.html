@@ -3,13 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi Cuenta/title>
     <link rel="stylesheet" href="styles/styles.css">
+    <title>Document</title>
 </head>
-
-
 <body>
-    
-    <script src="js/main.js"></script>
+    <main>       
+        <h1>Mis datos</h1>
+        <h2>Accede a tu cuenta</h2>
+        <section class="contenedorRegistro">
+            <h3>Formulario de Registro</h3>
+            <form id= "formularioRegistro" action="index.html" method="POST" class="formulario">
+            <input type="text" name="nombre" id="nombre" placeholder="Nombre" required class="input">
+            <input type="text" name="apellido" id="apellido" placeholder="Apellido" required class="input">
+            <input type="email" name="correo" id="email" placeholder="Correo Electrónico" required class="input">
+            <input type="password" name="contraseña" id="contraseña" placeholder="Contraseña" required class="input">
+            <input type="password" name="contraseña" id="confirmarContraseña" placeholder="Confirma tu contraseña" required class="input">
+            <p>Estoy de acuerdo con los <a href="#">Términos y Condiciones</a></p>
+            <input type="submit" value="Registrarme" class="botonFormulario">
+            </form>
+            <p> <a href="#">Ya tengo cuenta</a></p>
+        </section>        
+        </div>  
+    </main>
+   <script type="module" src="js/main.js"></script>
 </body>
 </html>
