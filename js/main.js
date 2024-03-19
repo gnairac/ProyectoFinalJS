@@ -197,7 +197,6 @@ function actualizarPrecioTotal() {
 
 const carroDeCompras = [];
 const respuestaInicioCompra = prompt("¿Deseas agregar productos al carro de compras? SI o NO");
-
 if (respuestaInicioCompra && respuestaInicioCompra.toUpperCase() === "SI") {
     carroDeCompras.push(producto1);
     alert("Producto agregado al carrito");
@@ -216,13 +215,20 @@ if (respuestaInicioCompra && respuestaInicioCompra.toUpperCase() === "SI") {
         }
     }
 } else {
-    const siguientePaso = prompt("¿Deseas guardar el producto en Lista de Favoritos? 1.SI, 2-NO");
-    if (siguientePaso && siguientePaso.toUpperCase() === "1") {
-        alert("Producto guardado en tu Lista de Favoritos");
-        console.log("Producto guardado en Lista de Favoritos");
-    } else {
-        alert("¡Te esperamos nuevamente!");
-        console.log("Producto no guardado en Lista de Favoritos");
+    let continuar = true;
+    while (continuar) {
+        const siguientePaso = prompt("¿Deseas guardar el producto en Lista de Favoritos? 1.SI, 2-NO");
+        if (siguientePaso && siguientePaso.toUpperCase() === "1") {
+            alert("Producto guardado en tu Lista de Favoritos");
+            console.log("Producto guardado en Lista de Favoritos");
+            continuar = false;
+        } else if (siguientePaso && siguientePaso.toUpperCase() === "2") {
+            alert("¡Te esperamos nuevamente!");
+            console.log("Producto no guardado en Lista de Favoritos");
+            break; // Break para que no siga ejecutando el código
+        } else {
+            alert("Ingresa 1-SI o 2-NO"); // Respuesta en caso que no ingresa un valor válido
+        }
     }
 }
 
@@ -251,5 +257,3 @@ if (respuestaCompra && respuestaCompra.toUpperCase() === "SI") {
         alert("Continuar a Forma de pago.");      
     }
 }
-
-
