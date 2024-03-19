@@ -1,3 +1,4 @@
+/*
 //PRIMERA ENTREGA
 
 //ALGORITMO DE FORMULARIO DE INGRESO DE UN NUEVO CLIENTE
@@ -94,26 +95,25 @@ function saludar(nombre, apellido) {
 alert(saludar(nombre, apellido));
 
 // Incrementar el número de cliente para el próximo nuevo cliente 
-incrementarNumeroCliente();
+incrementarNumeroCliente();*/
 
-    //SEGUNDA ENTREGA
+
+//SEGUNDA ENTREGA
 // Función CONSTRUCTOR para crear la ficha de producto 
 function Producto(SKU, Imagen, Categoria, Nombre, Descripcion, Color, Precio, Descuento) {
-    this.SKU = SKU; // Stock Keeping Unit, id único de producto
+    this.SKU = SKU;
     this.Imagen = Imagen;
     this.Categoria = Categoria;
     this.Nombre = Nombre;
     this.Descripcion = Descripcion;
     this.Color = Color;
-    this.Precio = parseFloat(Precio); // Float para que admita decimales
-    this.Descuento = parseFloat(Descuento); // Float para que admita decimales
+    this.Precio = parseFloat(Precio);
+    this.Descuento = parseFloat(Descuento);
 }
 
-//Creación del catálogo de productos 
-//Agregar valores a las propiedades para instanciar el objeto Producto
 const producto1 = new Producto(
     "21PEWT2150S",
-    "https://imagizer.imageshack.com/img924/1756/vNv6W4.png", //img localizada en un servidor externo
+    "https://imagizer.imageshack.com/img924/1756/vNv6W4.png",
     "Línea Blanca",
     "Aire Acondicionado LG",
     "CAPACIDAD: 12,000 BTU · DIMENSIONES LXAXP: Evaporador 837 x 308 x 189 mm",
@@ -124,7 +124,7 @@ const producto1 = new Producto(
 
 const producto2 = new Producto(
     "18P3WT1865A",
-    "https://imagizer.imageshack.com/img922/7452/JKBxHt.png", //img localizada en un servidor externo
+    "https://imagizer.imageshack.com/img922/7452/JKBxHt.png",
     "Línea Blanca",
     "Heladera SAMSUNG No frost 363 Lts",
     "CAPACIDAD: 363 litros. Freezer superior. Iluminación interior.",
@@ -135,7 +135,7 @@ const producto2 = new Producto(
 
 const producto3 = new Producto(
     "14P3WT1431A",
-    "https://imagizer.imageshack.com/img924/7990/UOQ2gC.png", //img localizada en un servidor externo
+    "https://imagizer.imageshack.com/img924/7990/UOQ2gC.png",
     "Línea Blanca",
     "Minibar HACEB 95 9002547",
     "Frost Congelador Inferior. NÚMERO DE PUERTAS: 1. Dispensador de Hielo.",
@@ -144,60 +144,112 @@ const producto3 = new Producto(
     "00.00"
 );
 
-// Función para calcular el precio final multiplicando por 1.21 y antes verficar si tiene dto
+const catalogo = [producto1, producto2, producto3];
+
+function buscarProductoPorNombre(nombreProducto) {
+    return catalogo.find(producto => {
+        const palabrasNombre = producto.Nombre.toLowerCase().split(' ');
+        return palabrasNombre.some(palabra => palabra.includes(nombreProducto.toLowerCase()));
+    });
+}
+
+//Función precio final, aplica descuento si existe, multiplica x 1.21 (IVA)
 function precioFinal(producto) {
     const precioSinIva = producto.Precio;
     const descuento = producto.Descuento;
-    if (descuento > 0) // Verificar si el producto tiene descuento > 0
-    {
-        const precioPromocional = precioSinIva - (precioSinIva * (descuento / 100)); // Descontar el descuento al precio sin IVA
-        return precioPromocional;
+    if (descuento > 0) {
+        const precioPromocional = precioSinIva - (precioSinIva * (descuento / 100));
+        const precioFinalConIva = precioPromocional * 1.21;
+        return precioFinalConIva;
     } else {
-        return precioSinIva;
+        const precioFinalConIva = precioSinIva * 1.21;
+        return precioFinalConIva;
     }
 }
 
-// Carro de compras
-const carroDeCompras = [];
+function eliminarProducto(nombreProducto) {
+    const indexProductoAEliminar = carroDeCompras.findIndex(producto => {
+        const nombreProductoMinuscula = nombreProducto.toLowerCase();
+        const palabrasNombre = producto.Nombre.toLowerCase().split(' ');
+        return palabrasNombre.some(palabra => palabra.includes(nombreProductoMinuscula));
+    });
+    if (indexProductoAEliminar !== -1) {
+        const productoEliminado = carroDeCompras.splice(indexProductoAEliminar, 1)[0];
+        alert("Producto excluido del carrito");
+        const precioProductoEliminado = precioFinal(productoEliminado);
+        console.log("Producto excluido");
+        console.log(carroDeCompras);
+        console.log("Precio del producto excluido: $" + precioProductoEliminado.toFixed(2));
+        alert("Precio del producto excluido: $" + precioProductoEliminado.toFixed(2));
+        actualizarPrecioTotal();
+    } else {
+        alert("No se encontró ningún producto con ese nombre, Inténtalo nuevamente.");
+        console.log("No se encontró el producto a excluir");
+    }
+}
 
-// Estando el usuario en la ficha del producto, se le pregunta si quiere agregarlo al carrito 
+function actualizarPrecioTotal() {
+    const totalPrecioFinal = carroDeCompras.reduce((total, producto) => total + producto.Precio, 0);
+    console.log(carroDeCompras);
+    console.log("Precio Total: $" + totalPrecioFinal.toFixed(2));
+    alert("Precio Total: $" + totalPrecioFinal.toFixed(2));
+}
+
+const carroDeCompras = [];
 const respuestaInicioCompra = prompt("¿Deseas agregar productos al carro de compras? SI o NO");
 
-// Opciones según la respuesta
-if (respuestaInicioCompra.toUpperCase() === "SI") { // Transformar a mayúsculas para unificar las respuestas
-    carroDeCompras.push(producto1); // Agregar producto al carro
-    console.log("Producto agregado"); // Mensaje de confirmación
+if (respuestaInicioCompra && respuestaInicioCompra.toUpperCase() === "SI") {
+    carroDeCompras.push(producto1);
+    alert("Producto agregado al carrito");
+    console.log("Producto agregado");
     const respuestaContinuarCompra = prompt("¿Deseas agregar otro producto al carro de compras? SI o NO");
-    if (respuestaContinuarCompra.toUpperCase() === "SI") { // Unificar las respuestas
-        carroDeCompras.push(producto2); // Agregar producto2 al carro;
-        console.log("Producto agregado"); // Mensaje de confirmación
-    }
-} else { 
-    const siguientePaso = prompt("¿Qué deseas hacer? Guardar en Lista de Favoritos o Excluir producto");
-    if (siguientePaso.toUpperCase() === "GUARDAR EN LISTA DE FAVORITOS") // Unificar las respuestas
-    {
-        console.log("Producto guardado en Lista de Favoritos");
-    } else if (siguientePaso.toUpperCase() === "EXCLUIR PRODUCTO") // Unificar las respuestas
-    {
-        const productoAEliminar = prompt("Selecciona el producto a excluir");
-        const indexProductoAEliminar = carroDeCompras.findIndex(producto => producto.Nombre === productoAEliminar); //Busca la posición dentro del array del carro a través de la propiedad Nombre
-        if (indexProductoAEliminar !== -1) //Verificar que el valor exista siendo distinto a -1
-        {
-            carroDeCompras.splice(indexProductoAEliminar, 1); // Eliminar el producto con slice
-            console.log("Producto excluido correctamente");
+    if (respuestaContinuarCompra && respuestaContinuarCompra.toUpperCase() === "SI") {
+        const nombreProductoAgregar = prompt("Escribe el nombre del producto que deseas agregar:");
+        const productoAgregar = buscarProductoPorNombre(nombreProductoAgregar);
+        if (productoAgregar) {
+            carroDeCompras.push(productoAgregar);
+            alert("Producto agregado al carrito");
+            console.log("Producto agregado");
+        } else {
+            alert("No se encontró ningún producto con ese nombre. Ingresa el nombre nuevamente.");
+            console.log("Producto no encontrado");
         }
+    }
+} else {
+    const siguientePaso = prompt("¿Deseas guardar el producto en Lista de Favoritos? 1.SI, 2-NO");
+    if (siguientePaso && siguientePaso.toUpperCase() === "1") {
+        alert("Producto guardado en tu Lista de Favoritos");
+        console.log("Producto guardado en Lista de Favoritos");
+    } else {
+        alert("¡Te esperamos nuevamente!");
+        console.log("Producto no guardado en Lista de Favoritos");
     }
 }
 
-// Aplicar la función precioFinal a cada producto en carroDeCompras
-carroDeCompras.forEach(producto => { // Función FLECHA
+carroDeCompras.forEach(producto => {
     producto.Precio = precioFinal(producto);
 });
 
 console.log(carroDeCompras);
 
-// Array de los nombres de los productos confirmados en la compra
+const totalPrecioFinal = carroDeCompras.reduce((total, producto) => total + producto.Precio, 0);
+
+console.log(carroDeCompras);
+
 const nombresProductosComprados = carroDeCompras.map(producto => producto.Nombre).join(", ");
-console.log("Tu compra incluye: " + nombresProductosComprados);
+console.log(nombresProductosComprados);
+alert("Tu compra incluye: " + nombresProductosComprados + " . Precio Total: $" + totalPrecioFinal.toFixed(2));
+
+const respuestaCompra = prompt("¿Confirmar la compra? SI o NO");
+if (respuestaCompra && respuestaCompra.toUpperCase() === "SI") {
+    alert("Continuar a Forma de pago.");
+} else {
+    const eliminarProductoConfirmacion = prompt("¿Deseas excluir algún producto del carrito? SI o NO");
+    if (eliminarProductoConfirmacion && eliminarProductoConfirmacion.toUpperCase() === "SI") {
+        const nombreProductoEliminar = prompt("Ingresa el nombre del producto a excluir:");
+        eliminarProducto(nombreProductoEliminar); 
+        alert("Continuar a Forma de pago.");      
+    }
+}
 
 
